@@ -10,6 +10,8 @@ int main() {
     int reponse = 0;
     Pile pile;
     int count = 0;
+    // référence constante pour faire la difference entre le top qui consulte et pas celui qui remplace
+    const Pile& pile_lecture = pile;
 
     cout << "Ce programme permet de manipuler une pile d'entiers." << endl << endl;
 
@@ -40,20 +42,40 @@ int main() {
 
         try {
             switch (reponse) {
-                case 1:
-                    push();
+                case 1: {
+                    int valeur;
+                    cout << "Valeur : ";
+                    cin >> valeur;
+                    push(pile, valeur, count);
+                    cout << "Valeur empilée." << endl;
                     break;
+                }
                 case 2:
-                    pop();
+                    pop(count);
+                    cout << "Valeur retirée : " << pile[count] << endl;
                     break;
-                case 3:
-                    top();
+                case 3: {
+                    int sommet = top(pile_lecture, count);
+                    cout << "Sommet : " << sommet << endl;
                     break;
-                case 4:
-                    top();
+                }
+                case 4: {
+                    int valeur;
+                    cout << "Valeur de remplacement : ";
+                    cin >> valeur;
+                    top(pile, count) = valeur;   // on écrit valeur dans la case du sommet
+                    cout << "Valeur remplacée." << endl;
                     break;
+                }
                 case 5:
-                    empty();
+                    if (empty(count))
+                    {
+                        cout << "La pile est vide." << endl;
+                    }
+                    else
+                    {
+                        cout << "La pile n'est pas vide." << endl;
+                    }
                     break;
                 case 6:
                     cout << "Nombre de valeurs : " << size(count) << endl;
@@ -72,6 +94,7 @@ int main() {
         } catch (const exception& erreur) {
             cout << "Erreur : " << erreur.what() << endl;
         }
+        cout << endl;
     } while (reponse != 0);
 
 

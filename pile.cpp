@@ -5,6 +5,7 @@
 #include "pile.hpp"
 #include <array>
 #include <iomanip>
+#include <stdexcept>
 
 using namespace std;
 
@@ -13,17 +14,38 @@ void push(Pile& pile, int n, int& count)
 {
     if (pile_size <= count)
     {
-        throw std::out_of_range("la pile est pleine");
+        throw overflow_error("impossible d'empiler dans une pile pleine.");
     }
     pile.at(count) = n;
     count++;
 
 }
-void pop()
+void pop(int& count)
 {
-
+    if (empty(count))
+    {
+        throw underflow_error("impossible de dépiler une pile vide.");
+    }
+    // on baisse juste le compteur, la case ne fait plus partie de la pile
+    count--;
 }
-void top();
+int top(const Pile& pile, const int& count)
+{
+    if (empty(count))
+    {
+        throw underflow_error("impossible de consulter le sommet d'une pile vide.");
+    }
+    return pile[count - 1];
+}
+// retourne une référence vers le sommet, pour pouvoir lui affecter une nouvelle valeur
+int& top(Pile& pile, const int& count)
+{
+    if (empty(count))
+    {
+        throw underflow_error("impossible de remplacer le sommet d'une pile vide.");
+    }
+    return pile[count - 1];
+}
 bool empty(const int& count)
 {
     if (count == 0)
@@ -66,7 +88,7 @@ void show_pile(const Pile& pile, const int& count)
             {
                 cout << "         ";
             }
-            cout << pile[i] << endl;
+            cout << setw(3) << pile[i] << endl;
         }
     }
 }
